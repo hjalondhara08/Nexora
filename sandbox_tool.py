@@ -143,7 +143,7 @@ def _docker_is_available() -> bool:
     if _docker_available is None:
         try:
             subprocess.run(
-                ["docker", "info"],
+                ["docker", "image", "inspect", DOCKER_IMAGE],
                 capture_output=True,
                 timeout=5,
                 check=True,
@@ -152,9 +152,8 @@ def _docker_is_available() -> bool:
         except Exception:
             _docker_available = False
             logger.warning(
-                "Docker not available — officecli will run as a plain subprocess "
-                "with no filesystem/network isolation. Build and run the "
-                f"'{DOCKER_IMAGE}' image to enable sandboxed execution."
+                f"Docker image '{DOCKER_IMAGE}' not found — officecli will run as a host subprocess "
+                "in /tmp/bot_sandboxes."
             )
     return _docker_available
 
