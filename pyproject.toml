@@ -1,0 +1,25 @@
+[project]
+name = "nexora"
+version = "0.1.0"
+description = "Production-Grade Hybrid RAG & Multi-Tool Agentic Chatbot powered by LangGraph, Qdrant, BM25, Cohere Reranking, and Streamlit UI."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "langchain>=0.3.0",
+    "langchain-cohere>=0.3.0",
+    "langchain-community>=0.3.0",
+    "langchain-core>=0.3.0",
+    "langchain-groq>=0.2.0",
+    "langchain-qdrant>=0.2.0",
+    "langgraph>=0.2.0",
+    "pypdf>=4.0.0",
+    "python-dotenv>=1.0.0",
+    "qdrant-client>=1.11.0",
+    "rank-bm25>=0.2.2",
+    "requests>=2.31.0",
+    "streamlit>=1.38.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

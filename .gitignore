@@ -1,0 +1,39 @@
+# Environment variables & secrets
+.env
+.env.local
+.env.*
+!.env.example
+
+# Databases & Runtime State
+chatbot.db
+chatbot.db-shm
+chatbot.db-wal
+*.db
+
+# Uploaded Files & Sandbox Output
+uploads/*
+!uploads/.gitkeep
+/tmp/bot_sandboxes/
+
+# Python Caches & Build Artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+build/
+dist/
+wheels/
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Virtual Environments & Locks
+.venv/
+venv/
+ENV/
+.uv.lock
+
+# IDE & OS Files
+.vscode/
+.idea/
+.DS_Store
+*.log
