@@ -5,7 +5,11 @@ description = "Production-Grade Hybrid RAG & Multi-Tool Agentic Chatbot powered 
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "cohere>=5.0.0",
+    "ddgs>=9.0.0",
+    "duckduckgo-search>=6.0.0",
     "langchain>=0.3.0",
+    "langchain-classic>=1.0.0",
     "langchain-cohere>=0.3.0",
     "langchain-community>=0.3.0",
     "langchain-core>=0.3.0",
@@ -23,3 +27,6 @@ dependencies = [
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

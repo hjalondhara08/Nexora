@@ -58,20 +58,42 @@ flowchart TD
 
 ```
 Nexora/
-├── frontend.py             # Streamlit web application & sidebar chat interface
-├── tools_lanngraph.py      # LangGraph state machine & multi-tool orchestrator
-├── hybrid_rag_reranker.py  # 4-stage Hybrid RAG retriever (Qdrant + BM25 + Cohere)
-├── sandbox_tool.py         # Session-scoped isolated execution sandbox for OfficeCLI
-├── main.py                 # CLI launcher script
-├── pyproject.toml          # Project configuration & UV/Pip dependencies
-├── requirements.txt        # Production dependency specifications
-├── .env.example            # Environment variable configuration template
-├── .gitignore              # Files excluded from version control
-└── experiments/            # Notebooks, MCP tests, & experimental scripts
-    ├── 12_mcp.py
-    ├── 13_rag.ipynb
-    ├── async_chatbot.py
-    └── client_mcp.py
+├── src/nexora/                 # Core Nexora Python package
+│   ├── __init__.py             # Package exports (version, chatbot, helpers)
+│   ├── config.py               # Centralized configuration & environment loader
+│   ├── core/                   # LangGraph Agent Core
+│   │   ├── __init__.py
+│   │   ├── agent.py            # StateGraph builder, nodes, conditional routing, compiled agent
+│   │   ├── state.py            # TypedDict ChatState definition
+│   │   ├── prompts.py          # Dynamic system prompt generator
+│   │   └── database.py         # SQLite checkpointer & thread management helpers
+│   ├── rag/                    # 4-Stage Hybrid RAG Engine
+│   │   ├── __init__.py
+│   │   ├── loader.py           # Document loading, path resolution, text chunking
+│   │   └── retriever.py        # Qdrant dense + BM25 sparse + RRF + Cohere reranker
+│   ├── tools/                  # Agent Tool Implementations
+│   │   ├── __init__.py         # Tool registry & unified export
+│   │   ├── calculator.py       # Arithmetic calculator tool
+│   │   ├── search.py           # DuckDuckGo live web search tool
+│   │   ├── finance.py          # Alpha Vantage financial stock price tool
+│   │   ├── rag_tool.py         # Hybrid RAG document retrieval tool
+│   │   └── sandbox_tool.py     # Session-isolated sandbox tool (OfficeCLI & text)
+│   └── ui/                     # User Interface
+│       ├── __init__.py
+│       └── app.py              # Streamlit web application & sidebar chat interface
+├── data/                       # Structured persistent data
+│   ├── sample/                 # Sample documents (e.g. Atomic_Habit.pdf)
+│   ├── uploads/                # User-uploaded PDFs for dynamic indexing
+│   └── chatbot.db              # Persistent SQLite conversation thread memory
+├── trash/                      # 🗑️ Archived non-essential items
+│   ├── README.md               # Explanation of archived files
+│   ├── experiments/            # Archived experimental prototypes & notebooks
+│   └── legacy_root_files/      # Old flat monolithic files moved out of root
+├── main.py                     # Primary CLI launcher (auto-detects .venv)
+├── pyproject.toml              # Project configuration & package definitions
+├── requirements.txt            # Production dependency specifications
+├── .env.example                # Environment variable configuration template
+└── .gitignore                  # Version control ignore definitions
 ```
 
 ---
@@ -90,7 +112,7 @@ docker run -p 6333:6333 qdrant/qdrant
 
 ### 2. Installation
 
-Clone the repository and set up a virtual environment:
+Clone the repository and install dependencies:
 
 ```bash
 git clone https://github.com/hjalondhara08/Nexora.git
@@ -100,8 +122,9 @@ cd Nexora
 python -m venv .venv
 source .venv/bin/activate   # On Windows: .venv\Scripts\activate
 
-# Install dependencies
+# Install package and dependencies
 pip install -r requirements.txt
+pip install -e .
 ```
 
 ### 3. Environment Configuration
@@ -123,15 +146,20 @@ QDRANT_URL=http://localhost:6333
 
 ## 🚀 Running the Application
 
-Launch the Streamlit web interface:
+Launch the Streamlit web interface using `main.py`:
 
-```bash
-streamlit run frontend.py
-```
-
-Or using `main.py`:
 ```bash
 python main.py
+```
+
+Or launch Streamlit directly:
+```bash
+streamlit run src/nexora/ui/app.py
+```
+
+To test the core agent in CLI mode directly:
+```bash
+python src/nexora/core/agent.py
 ```
 
 Open your browser at `http://localhost:8501`.

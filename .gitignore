@@ -13,7 +13,12 @@ chatbot.db-wal
 # Uploaded Files & Sandbox Output
 uploads/*
 !uploads/.gitkeep
+data/uploads/*
+!data/uploads/.gitkeep
 /tmp/bot_sandboxes/
+
+# Trash / Archive
+trash/
 
 # Python Caches & Build Artifacts
 __pycache__/
