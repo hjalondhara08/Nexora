@@ -1,3 +1,0 @@
-"""
-Nexora UI Package
-"""
