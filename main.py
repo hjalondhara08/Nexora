@@ -17,18 +17,41 @@ def main():
     print("=" * 60)
     print("🚀 Nexora — Production Hybrid RAG & Multi-Tool Agentic Platform")
     print("=" * 60)
-    print("\nStarting Streamlit Frontend interface...\n")
-    
+
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    app_path = os.path.join(current_dir, "src", "nexora", "ui", "app.py")
-    if not os.path.exists(app_path):
-        app_path = os.path.join(current_dir, "frontend.py")
-        
     py_exec = find_python_executable()
-    print(f"Using Python runtime: {py_exec}\n")
-    
-    cmd = [py_exec, "-m", "streamlit", "run", app_path, *sys.argv[1:]]
-    subprocess.run(cmd)
+
+    # Legacy Streamlit flag if user explicitly requests running archived Streamlit
+    if "--streamlit" in sys.argv:
+        print("\nStarting Archived Streamlit Frontend interface...\n")
+        archive_app_path = os.path.join(current_dir, "archive", "ui", "app.py")
+        cmd = [py_exec, "-m", "streamlit", "run", archive_app_path]
+        subprocess.run(cmd)
+        return
+
+    print("\nStarting Async FastAPI Backend & React Frontend Server...\n")
+    print(f"Using Python runtime: {py_exec}")
+    print("FastAPI Backend: http://0.0.0.0:8000")
+    print("API Documentation: http://0.0.0.0:8000/docs")
+    print("React Web UI: http://0.0.0.0:8000/\n")
+
+    # Ensure src is in PYTHONPATH
+    src_dir = os.path.join(current_dir, "src")
+    env = os.environ.copy()
+    env["PYTHONPATH"] = f"{src_dir}:{env.get('PYTHONPATH', '')}"
+
+    cmd = [
+        py_exec,
+        "-m",
+        "uvicorn",
+        "nexora.api.server:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000",
+        "--reload",
+    ]
+    subprocess.run(cmd, env=env)
 
 if __name__ == "__main__":
     main()

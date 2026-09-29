@@ -146,23 +146,37 @@ QDRANT_URL=http://localhost:6333
 
 ## 🚀 Running the Application
 
-Launch the Streamlit web interface using `main.py`:
+### Option A: Using the Startup Script (Recommended)
+
+Run Nexora with the automated all-in-one startup script:
+
+```bash
+./run.sh
+```
+
+This script will automatically:
+1. Verify Docker is running and spin up **PostgreSQL (PGVector)** on port `5433` and **Qdrant** on port `6333`.
+2. Activate or initialize the Python virtual environment (`.venv`).
+3. Start the FastAPI async backend and serve the compiled React SPA.
+
+**Other script modes:**
+```bash
+./run.sh --docker    # Run the full application stack in Docker containers
+./run.sh --dev       # Run FastAPI backend + Vite React dev server in parallel
+./run.sh --status    # Check health and port status of containers
+./run.sh --stop      # Stop all Docker services
+```
+
+### Option B: Manual CLI Launch
 
 ```bash
 python main.py
 ```
 
-Or launch Streamlit directly:
-```bash
-streamlit run src/nexora/ui/app.py
-```
-
-To test the core agent in CLI mode directly:
-```bash
-python src/nexora/core/agent.py
-```
-
-Open your browser at `http://localhost:8501`.
+### 🌐 Access Points
+- **Web UI**: [http://localhost:8000](http://localhost:8000)
+- **Interactive Swagger Docs**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **Qdrant Vector Dashboard**: [http://localhost:6333/dashboard](http://localhost:6333/dashboard)
 
 ---
 

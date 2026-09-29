@@ -1,0 +1,13 @@
+.git
+.venv
+venv
+ENV
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+ui/node_modules
+archive
+trash
+*.log
+.DS_Store

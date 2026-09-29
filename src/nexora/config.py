@@ -43,3 +43,13 @@ COHERE_API_KEY = os.getenv("COHERE_API_KEY")
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
 
 ALPHA_VANTAGE_API_KEY = os.getenv("ALPHA_VANTAGE_API_KEY", "C9PE94QUEW9VWGFM")
+
+# PostgreSQL & PGVector Connection (Docker container nexora-pgvector on port 5433)
+POSTGRES_URL = os.getenv(
+    "POSTGRES_URL",
+    "postgresql://nexora:nexora_password@localhost:5433/nexora_db",
+)
+
+# FastAPI Security Key
+NEXORA_API_KEY = os.getenv("NEXORA_API_KEY", "nexora-secret-key-2026")
+

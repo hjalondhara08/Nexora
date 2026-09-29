@@ -26,6 +26,8 @@ __pycache__/
 *$py.class
 build/
 dist/
+!ui/dist/
+!ui/dist/**
 wheels/
 *.egg-info/
 .pytest_cache/
@@ -42,3 +44,7 @@ ENV/
 .idea/
 .DS_Store
 *.log
+
+# Frontend React UI Node Modules
+ui/node_modules/
+
