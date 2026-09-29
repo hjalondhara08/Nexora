@@ -1,25 +1,36 @@
-FROM python:3.11-slim
+# ==============================================================================
+# Multi-Stage Distroless Container for Nexora
+# ==============================================================================
+# Stage 1: Build & install dependencies in Debian Bookworm (Python 3.11)
+FROM python:3.11-slim-bookworm AS builder
+
+WORKDIR /build
+
+COPY requirements.txt .
+
+# Install dependencies into dedicated site-packages directory
+RUN pip install --no-cache-dir --target=/build/site-packages -r requirements.txt
+
+# ==============================================================================
+# Stage 2: Distroless Runtime (Python 3.11 Debian 12)
+FROM gcr.io/distroless/python3-debian12:latest
 
 WORKDIR /app
 
-# Install curl for health checks
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+# Copy compiled dependencies from builder stage
+COPY --from=builder /build/site-packages /app/site-packages
 
-# Install python dependencies (all pre-compiled binary wheels)
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy application source code, persistent data template, and React SPA dist
+COPY src/ /app/src/
+COPY data/ /app/data/
+COPY ui/dist/ /app/ui/dist/
+COPY main.py /app/main.py
 
-# Copy backend code, default data, and pre-built React UI SPA
-COPY src/ ./src/
-COPY data/ ./data/
-COPY ui/dist/ ./ui/dist/
-COPY main.py .
-
-ENV PYTHONPATH="/app/src:${PYTHONPATH}"
+# Configure Python path and output buffering
+ENV PYTHONPATH="/app/site-packages:/app/src"
 ENV PYTHONUNBUFFERED=1
 
 EXPOSE 8000
 
-CMD ["uvicorn", "nexora.api.server:app", "--host", "0.0.0.0", "--port", "8000"]
+# Start async FastAPI application via uvicorn
+CMD ["-m", "uvicorn", "nexora.api.server:app", "--host", "0.0.0.0", "--port", "8000"]
