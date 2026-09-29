@@ -21,13 +21,6 @@ def main():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     py_exec = find_python_executable()
 
-    # Legacy Streamlit flag if user explicitly requests running archived Streamlit
-    if "--streamlit" in sys.argv:
-        print("\nStarting Archived Streamlit Frontend interface...\n")
-        archive_app_path = os.path.join(current_dir, "archive", "ui", "app.py")
-        cmd = [py_exec, "-m", "streamlit", "run", archive_app_path]
-        subprocess.run(cmd)
-        return
 
     print("\nStarting Async FastAPI Backend & React Frontend Server...\n")
     print(f"Using Python runtime: {py_exec}")
